@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Clean') {
             steps {
                 dir('TutorialsNinja_Project') {
                     bat 'mvn clean'
