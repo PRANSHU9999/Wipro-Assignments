@@ -37,7 +37,9 @@ public class RegisterPage {
 
     public void clickMyAccount() {
 
-        driver.findElement(myAccount).click();
+        WaitHelper wh = new WaitHelper(driver);
+
+        wh.waitForClickableElement(myAccount).click();
     }
 
     public void clickRegister() {

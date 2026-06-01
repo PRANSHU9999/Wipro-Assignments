@@ -50,7 +50,9 @@ public class CartPage {
 
     public void clickAddToCart() {
 
-        driver.findElement(addToCartButton).click();
+        WaitHelper wh = new WaitHelper(driver);
+
+        wh.waitForClickableElement(addToCartButton).click();
     }
 
     public boolean isSuccessMessageDisplayed() {

@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import utilities.WaitHelper;
+
 public class LoginPage {
 
     WebDriver driver;
@@ -26,7 +28,9 @@ public class LoginPage {
 
     public void clickMyAccount() {
 
-        driver.findElement(myAccount).click();
+        WaitHelper wh = new WaitHelper(driver);
+
+        wh.waitForClickableElement(myAccount).click();
     }
 
     public void clickLogin() {
