@@ -1,51 +1,59 @@
 pipeline {
- agent any
+    agent any
 
- tools {
- maven 'Maven3'
- }
+    tools {
+        maven 'Maven3'
+    }
 
- stages {
+    stages {
 
- stage('Checkout') {
- steps {
- git branch: 'main',
-url: 'https://github.com/PRANSHU9999/Wipro-Assignments.git'
- }
- }
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/PRANSHU9999/Wipro-Assignments.git'
+            }
+        }
 
- stage('Build') {
- steps {
- bat 'mvn clean'
- }
- }
+        stage('Build') {
+            steps {
+                dir('TutorialsNinja_Project') {
+                    bat 'mvn clean'
+                }
+            }
+        }
 
- stage('Compile') {
- steps {
- bat 'mvn compile'
- }
- }
+        stage('Compile') {
+            steps {
+                dir('TutorialsNinja_Project') {
+                    bat 'mvn compile'
+                }
+            }
+        }
 
- stage('Test') {
- steps {
- bat 'mvn test'
- }
- }
+        stage('Test') {
+            steps {
+                dir('TutorialsNinja_Project') {
+                    bat 'mvn test'
+                }
+            }
+        }
 
- stage('Package') {
- steps {
- bat 'mvn package'
- }
- }
- }
+        stage('Package') {
+            steps {
+                dir('TutorialsNinja_Project') {
+                    bat 'mvn package'
+                }
+            }
+        }
+    }
 
- post {
- success {
- echo 'Build Successful'
- }
+    post {
+        success {
+            echo 'Build Successful'
+        }
 
- failure {
- echo 'Build Failed'
- }
- }
+        failure {
+            echo 'Build Failed'
+        }
+    }
 }
