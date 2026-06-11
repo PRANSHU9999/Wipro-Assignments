@@ -21,6 +21,6 @@ import io.cucumber.junit.CucumberOptions;
         monochrome = true
 )
 
-public class JUnitRunner {
+public class JUnitRunnerTest {
 
 }
