@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER = '/usr/local/bin/docker'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/PRANSHU9999/Wipro-Assignments.git'
+            }
+        }
+
+        stage('Check Docker') {
+            steps {
+                sh '${DOCKER} --version'
+                sh '${DOCKER} ps'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir('eclipse-workspace/Cucumber_BDD') {
+                    sh '${DOCKER} build -t cucumber-framework .'
+                }
+            }
+        }
+
+        stage('Start Selenium Chrome') {
+            steps {
+                sh '${DOCKER} network create selenium-net || true'
+                sh '${DOCKER} rm -f selenium-chrome || true'
+
+                sh '''
+                ${DOCKER} run -d \
+                --name selenium-chrome \
+                --network selenium-net \
+                -p 4444:4444 \
+                --platform linux/amd64 \
+                selenium/standalone-chrome:latest
+                '''
+
+                sh 'sleep 30'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                ${DOCKER} run --rm \
+                --network selenium-net \
+                cucumber-framework \
+                mvn test \
+                -Dtest=Runner.RunCucumberTest \
+                -Dselenium.remote.url=http://selenium-chrome:4444/wd/hub
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build Successful'
+        }
+
+        failure {
+            echo 'Build Failed'
+        }
+
+        always {
+            sh '${DOCKER} rm -f selenium-chrome || true'
+        }
+    }
+}
